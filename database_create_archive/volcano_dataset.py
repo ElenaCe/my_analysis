@@ -13,13 +13,14 @@ password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
 port = os.getenv("DB_PORT")
 
+# Create the schema needed
+# Schema and table information
+schema_name = "volcano_schema"
+
 # create schema
 def create_schema(cursor, schema_name):
     create_schema_query = sql.SQL("CREATE SCHEMA IF NOT EXISTS volcano_schema").format(sql.Identifier(schema_name))
     cursor.execute(create_schema_query)
-
-# Add the table needed
-table_name = "volcano_data"
 
 def main():
     # Connect to PostgreSQL
