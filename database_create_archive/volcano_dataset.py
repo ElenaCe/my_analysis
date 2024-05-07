@@ -14,9 +14,9 @@ password = os.getenv("DB_PASSWORD")
 host = os.getenv("DB_HOST")
 port = os.getenv("DB_PORT")
 
-# Create the schema needed
-# Schema and table information
+# Variable names
 schema_name = "volcano_schema"
+table_name = "volcano_regional_data"
 
 # create schema
 def create_schema(cursor, schema_name):
@@ -24,12 +24,8 @@ def create_schema(cursor, schema_name):
     cursor.execute(create_schema_query)
 
 # create table 
-table_name = "volcano_regional_data"
-
-
-# data imported from https://www.kaggle.com/datasets/ramjasmaurya/volcanoes-on-earth-in-2021
-def create_table(cursor):
-    cursor.execute("""
+def create_table(cursor, schema_name, table_name):
+    create_table_query = sql.SQL("""
         CREATE TABLE IF NOT EXISTS {}.{} (
             volcano_name VARCHAR,
             volcano_image_url VARCHAR,
@@ -48,16 +44,18 @@ def create_table(cursor):
             population_within_30km INT,
             population_within_100km INT
         )
-    """.format(schema_name, table_name))
+    """).format(sql.Identifier(schema_name), sql.Identifier(table_name))
+    cursor.execute(create_table_query)
+    print("Table created successfully!")
 
 # Function to insert data from CSV into the table
-def insert_data(cursor, csv_file):
+def insert_data(cursor, schema_name, table_name, csv_file):
     with open(csv_file, 'r') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            cursor.execute("""
+            cursor.execute(sql.SQL("""
                 INSERT INTO {}.{} VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """.format(schema_name, table_name), (
+            """).format(sql.Identifier(schema_name), sql.Identifier(table_name)), (
                 row['volcano_name'],
                 row['volcano_image_url'],
                 row['volcano_type'],
@@ -75,23 +73,32 @@ def insert_data(cursor, csv_file):
                 row['population_within_30km'],
                 row['population_within_100km']
             ))
+    print("Data inserted successfully!")
 
 def main():
-    # Connect to PostgreSQL
-    conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
-    cursor = conn.cursor()
+    try:
+        # Connect to PostgreSQL
+        conn = psycopg2.connect(dbname=dbname, user=user, password=password, host=host, port=port)
+        cursor = conn.cursor()
 
-    # # Create schema
-    # create_schema(cursor, schema_name)
+        # create schema
+        create_schema(cursor, schema_name)
+        
+        # create table
+        create_table(cursor, schema_name, table_name)
 
-    # Create table
-    create_table(cursor)
+        # data from csv
+        csv_file = "/Users/elenacellitti/Documents/code/my_analysis/datasets/volcanos_of_the_world.csv"
+        insert_data(cursor, schema_name, table_name, csv_file)
 
-    # Insert data from CSV
-    csv_file = "/Users/elenacellitti/Documents/code/my_analysis/datasets/volcanos_of_the_world.csv"
-    insert_data(cursor, csv_file)
+        # commit changes and close connection
+        conn.commit()
+        cursor.close()
+        conn.close()
+        
+    # for error handling
+    except Exception as e:
+        print("An error occurred:", e)
 
-# Commit changes and close connection
-    conn.commit()
-    cursor.close()
-    conn.close()
+if __name__ == "__main__":
+    main()
