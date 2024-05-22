@@ -1,7 +1,7 @@
+import pandas as pd
 import csv
 from datetime import datetime, timedelta
 import random
-import pandas as pd
 
 # Helper function to generate random purchase months
 def generate_purchase_months(create_month, num_months):
@@ -28,17 +28,17 @@ for user_id in range(1, 10001):
         user_data.append([f"{user_id}", create_month, purchase_month])
 
 # Write data to CSV
-with open('sample_users.csv', mode='w', newline='') as file:
+with open('/Users/elenacellitti/Documents/code/my_analysis/datasets/sample_users.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(["user_id", "account_create_month", "purchase_month"])
     for row in user_data:
         writer.writerow([row[0], row[1].strftime('%Y-%m-%d'), row[2].strftime('%Y-%m-%d')])
 
 # Read data into pandas DataFrame
-df = pd.read_csv('sample_users.csv')
+df = pd.read_csv('/Users/elenacellitti/Documents/code/my_analysis/datasets/sample_users.csv')
 
 # Group by user_id and purchase_month, then count the occurrences
-summary_df = df.groupby(['user_id', 'purchase_month']).size().reset_index(name='purchase_count')
+summary_df = df.groupby(['user_id', 'account_create_month', 'purchase_month']).size().reset_index(name='purchase_count')
 
 # Write summarized data to a new CSV
-summary_df.to_csv('sample_users_summarized.csv', index=False)
+summary_df.to_csv('/Users/elenacellitti/Documents/code/my_analysis/datasets/sample_users_summarized.csv', index=False)
