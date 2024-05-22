@@ -7,7 +7,7 @@ import random
 def generate_purchase_months(create_month):
     num_months = random.choices([1, 3, 4, 5, 6], weights=[10, 40, 20, 10, 20])[0]
     months = []
-    current_month = create_month
+    current_month = create_month + timedelta(days=30)  # Start purchases from the next month
     for _ in range(num_months):
         months.append(current_month)
         # Move to the next month
