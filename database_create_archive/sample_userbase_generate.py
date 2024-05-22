@@ -3,14 +3,13 @@ import csv
 from datetime import datetime, timedelta
 import random
 
-# Helper function to generate random purchase months
-def generate_purchase_months(create_month, num_months):
+# Helper function to generate random purchase months based on constraints
+def generate_purchase_months(create_month):
+    num_months = random.choices([1, 3, 4, 5, 6], weights=[10, 40, 20, 10, 20])[0]
     months = []
     current_month = create_month
     for _ in range(num_months):
-        # Randomly decide if the user makes a purchase this month
-        if random.random() < 0.8:  # 80% chance of making a purchase
-            months.append(current_month)
+        months.append(current_month)
         # Move to the next month
         next_month = current_month + timedelta(days=30)
         current_month = datetime(next_month.year, next_month.month, 1)
@@ -22,8 +21,7 @@ base_date = datetime(2023, 11, 1)
 for user_id in range(1, 10001):
     create_month = base_date + timedelta(days=30 * ((user_id - 1) % 7))
     create_month = datetime(create_month.year, create_month.month, 1)
-    num_months = random.randint(1, 6)  # Each user can have purchases up to 6 months
-    purchase_months = generate_purchase_months(create_month, num_months)
+    purchase_months = generate_purchase_months(create_month)
     for purchase_month in purchase_months:
         user_data.append([f"{user_id}", create_month, purchase_month])
 
