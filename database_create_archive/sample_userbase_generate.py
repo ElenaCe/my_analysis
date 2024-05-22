@@ -3,7 +3,7 @@ import csv
 from datetime import datetime, timedelta
 import random
 
-# Helper function to generate random purchase months based on constraints
+# Function to generate random purchase months based on constraints
 def generate_purchase_months(create_month):
     num_months = random.choices([1, 3, 4, 5, 6], weights=[10, 40, 20, 10, 20])[0]
     months = []
@@ -32,11 +32,12 @@ with open('/Users/elenacellitti/Documents/code/my_analysis/datasets/sample_users
     for row in user_data:
         writer.writerow([row[0], row[1].strftime('%Y-%m-%d'), row[2].strftime('%Y-%m-%d')])
 
-# Read data into pandas DataFrame
+# Read data into a dataframe
 df = pd.read_csv('/Users/elenacellitti/Documents/code/my_analysis/datasets/sample_users.csv')
 
 # Group by user_id and purchase_month, then count the occurrences
+# This is to clean up the data as a user can make more than one purchase per month
 summary_df = df.groupby(['user_id', 'account_create_month', 'purchase_month']).size().reset_index(name='purchase_count')
 
-# Write summarized data to a new CSV
+# Save csv file 
 summary_df.to_csv('/Users/elenacellitti/Documents/code/my_analysis/datasets/sample_users_summarized.csv', index=False)
