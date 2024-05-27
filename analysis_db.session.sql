@@ -1,0 +1,1 @@
+select * from ecommerce_schema.oct_nov_19 limit 1;

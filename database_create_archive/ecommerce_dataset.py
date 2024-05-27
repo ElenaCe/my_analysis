@@ -36,13 +36,13 @@ def create_table(cursor, schema_name, table_name):
     cursor.execute(create_table_query)
     print("Table created successfully!")
 
-# # CSV files were deleted from the repo due to the size 
-# # They're original source was https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store/data
-# # Define the base path to your CSV files
-# base_path = '/Users/elenacellitti/Documents/code/my_analysis/datasets/'
+# CSV files were deleted from the repo due to the size 
+# They're original source was https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store/data
+# Define the base path to your CSV files
+base_path = '/Users/elenacellitti/Documents/code/my_analysis/datasets/'
 
-# # List of file names
-# file_names = ['ecommerce_nov_19.csv', 'ecommerce_oct_19.csv']
+# List of file names
+file_names = ['ecommerce_nov_19.csv', 'ecommerce_oct_19.csv']
 
 # Generate full paths
 csv_files = [base_path + file_name for file_name in file_names]
