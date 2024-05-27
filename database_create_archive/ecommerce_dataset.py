@@ -39,7 +39,7 @@ def create_table(cursor, schema_name, table_name):
 # CSV files were deleted from the repo due to the size 
 # They're original source was https://www.kaggle.com/datasets/mkechinov/ecommerce-behavior-data-from-multi-category-store/data
 # Define the base path to your CSV files
-base_path = '/Users/elenacellitti/Documents/code/my_analysis/datasets/'
+base_path = '/Users/elenacellitti/Downloads/ecommerce_data/'
 
 # List of file names
 file_names = ['ecommerce_nov_19.csv', 'ecommerce_oct_19.csv']
